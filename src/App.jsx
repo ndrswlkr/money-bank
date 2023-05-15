@@ -1,24 +1,27 @@
-import logo from './logo.svg';
 import styles from './App.module.css';
+import Navbar from './components/Navbar'
+import AddBankItem from './components/AddBankItem'
+import {bank_store} from './functions/data.js'
+import {For, createSignal, Show} from 'solid-js'
+import '@picocss/pico'
+
 
 function App() {
+  const [bank, set_bank] = bank_store()
+  const [show_add, set_show_add] = createSignal(false)
   return (
-    <div class={styles.App}>
-      <header class={styles.header}>
-        <img src={logo} class={styles.logo} alt="logo" />
-        <p>
-          Edit <code>src/App.jsx</code> and save to reload.
-        </p>
-        <a
-          class={styles.link}
-          href="https://github.com/solidjs/solid"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn Solid
-        </a>
-      </header>
-    </div>
+    <main>
+      <Navbar />
+      <Show when={show_add()}>
+        <AddBankItem set_bank={set_bank}/>
+      </Show>
+      <button onclick={() => set_show_add(!show_add()) }>add</button>
+      <For each={bank}>
+        {(item, i) => (
+          <p>{item.description}</p>
+          )} 
+      </For>
+    </main>
   );
 }
 
